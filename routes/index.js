@@ -45,7 +45,12 @@ const mapLocation = (data)=>{
 
 
 /* GET home page. */
+router.get('/',(req,res,next)=>{
+    res.send('Sup')
+})
+
 router.post('/messages', function(req, res, next) {
+    console.log('..........')
  if(empty(req.body))
     return res.end();
   var queries = [];
@@ -62,6 +67,7 @@ router.post('/messages', function(req, res, next) {
 });
 
 router.post('/locations', function(req, res, next) {
+    console.log('..........')
     if(empty(req.body) || empty(req.body.location))
         return res.end();
     var location = req.body.location;
