@@ -13,6 +13,7 @@
     "dateformat": "^2.0.0",
     "debug": "~2.2.0",
     "express": "~4.13.4",
+    "express-cassandra": "^1.8.3",
     "geocoder": "^0.2.3",
     "is-empty": "^1.2.0",
     "jade": "~1.11.0",
