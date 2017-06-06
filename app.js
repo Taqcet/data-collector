@@ -32,7 +32,7 @@ models.setDirectory(__dirname+'/models').bind(
     {
       clientOptions: {
         //contactPoints: ['188.226.160.187'],
-        //contactPoints: ['localhost'],
+        contactPoints: ['localhost'],
         protocolOptions: { port: 9042 },
         keyspace: 'taqcet',
         queryOptions: {consistency: models.consistencies.one}
