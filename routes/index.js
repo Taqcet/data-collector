@@ -4,10 +4,8 @@ const cassandra = require('cassandra-driver');
 var geocoder = require('geocoder');
 var path = require('path');
 var dateFormat = require('dateformat');
-console.log(__dirname)
-
-
-
+var Message = require('../mongoose/messages')
+var Location = require('../mongoose/locations')
 
 
 
@@ -58,16 +56,22 @@ router.post('/messages', function(req, res, next) {
  if(empty(req.body))
     return res.end();
   var queries = [];
-  req.body.message.forEach(s => {
+  var messages = req.body.message.map(s => {
+      delete s._id;
       s.date = makeDate(s.date);
-      var event = new models.instance.Message(s);
-      var save_query = event.save({return_query: true});
-      queries.push(save_query);
+      return s;
+      //var event = new models.instance.Message(s);
+      //var save_query = event.save({return_query: true});
+      //queries.push(save_query);
   });
-  models.doBatch(queries, function(err){
-     if(err) throw err;
-     res.json({done:true});
-  });
+
+    Message.insertMany(messages)
+        .then(s => res.json({done:true}))
+        .catch(err=>console.log(err))
+  //models.doBatch(queries, function(err){
+  //   if(err) throw err;
+  //   res.json({done:true});
+  //});
 });
 
 router.post('/locations', function(req, res, next) {
@@ -78,14 +82,14 @@ router.post('/locations', function(req, res, next) {
     location.date = makeDate(location.date);
 
 
-    const record = (l) => {
-        var event = new models.instance.Location(l);
-        var save_query = event.save({return_query: true});
-        models.doBatch(save_query, function(err){
-            if(err) throw err;
-            res.json({done:true});
-        });
-    }
+    //const record = (l) => {
+    //    var event = new models.instance.Location(l);
+    //    var save_query = event.save({return_query: true});
+    //    models.doBatch(save_query, function(err){
+    //        if(err) throw err;
+    //        res.json({done:true});
+    //    });
+    //}
 
     geocoder.reverseGeocode(location.latitude, location.longitude,
     function ( err, data ) {
@@ -93,7 +97,9 @@ router.post('/locations', function(req, res, next) {
             var v = mapLocation(data.results);
             location = Object.assign(location, v);
         }
-        record(location);
+        var f = new Location(location);
+        f.save(location).then(s => res.json({done:true}))
+        //record(location);
     });
 
 
