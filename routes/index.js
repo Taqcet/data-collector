@@ -8,6 +8,10 @@ console.log(__dirname)
 
 
 
+
+
+
+
 const makeDate=(f)=>{
     var d = new Date(f);
     var x = dateFormat(d, 'yyyy-mm-dd HH:mm');
@@ -72,20 +76,24 @@ router.post('/locations', function(req, res, next) {
         return res.end();
     var location = req.body.location;
     location.date = makeDate(location.date);
-    
+
+
+    const record = (l) => {
+        var event = new models.instance.Location(l);
+        var save_query = event.save({return_query: true});
+        models.doBatch(save_query, function(err){
+            if(err) throw err;
+            res.json({done:true});
+        });
+    }
+
     geocoder.reverseGeocode(location.latitude, location.longitude,
     function ( err, data ) {
         if(data.status == 'OK'){
             var v = mapLocation(data.results);
             location = Object.assign(location, v);
         }
-        var event = new models.instance.Location(location);
-        var save_query = event.save({return_query: true});
-        models.doBatch(save_query, function(err){
-            if(err) throw err;
-            res.json({done:true});
-        });
-
+        record(location);
     });
 
 

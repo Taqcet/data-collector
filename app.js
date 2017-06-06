@@ -33,7 +33,7 @@ models.setDirectory(__dirname+'/models').bind(
       clientOptions: {
         //contactPoints: ['146.185.179.181'],
         contactPoints: ['localhost'],
-        protocolOptions: { port: 9160 },
+        protocolOptions: { port: 9042 },
         keyspace: 'taqcet',
         queryOptions: {consistency: models.consistencies.one}
       },
@@ -51,6 +51,7 @@ models.setDirectory(__dirname+'/models').bind(
       else console.log(models.timeuuid());
     }
 );
+
 
 
 // catch 404 and forward to error handler
