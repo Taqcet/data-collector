@@ -31,7 +31,7 @@ global.models = require('express-cassandra');
 models.setDirectory(__dirname+'/models').bind(
     {
       clientOptions: {
-        contactPoints: ['188.226.160.187'],
+        //contactPoints: ['188.226.160.187'],
         //contactPoints: ['localhost'],
         protocolOptions: { port: 9042 },
         keyspace: 'taqcet',
